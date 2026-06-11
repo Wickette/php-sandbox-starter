@@ -1,5 +1,8 @@
 <?php
 
+// Comparison Operators and Logical Operators in PHP
+// In PHP, comparison operators are used to compare two values, while logical operators are used to combine multiple conditions.
+
 /*
 | Comparison Operators
 | Operator | Description              |
