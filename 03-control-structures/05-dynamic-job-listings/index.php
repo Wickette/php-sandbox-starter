@@ -22,7 +22,7 @@ $listings = [
     'description' => 'We are hiring an experienced accountant to handle financial transactions and ensure compliance.',
     'salary' => 55000,
     'location' => 'Chicago',
-    'tags' => ['Accounting', 'Bookkeeping', 'Financial Reporting']
+    'tags' => []
   ],
   [
     'id' => 4,
@@ -38,7 +38,7 @@ $listings = [
     'description' => 'We are looking for a friendly customer service representative to assist customers and resolve issues.',
     'salary' => 40000,
     'location' => 'New York',
-    'tags' => ['Customer Support', 'Communication', 'Problem Solving']
+    'tags' => []
   ],
 ];
 ?>
@@ -62,9 +62,9 @@ $listings = [
   </header>
   <div class="container mx-auto p-4 mt-4">
     <!-- Output -->
-    <?php foreach ($listings as $job) : ?>
+        <?php foreach ($listings as $index => $job) : ?>
       <div class="md my-4">
-        <div class="bg-white rounded-lg shadow-md">
+        <div class="<?php if($index % 2 === 0) : ?>bg-white<?php else : ?>bg-blue-100<?php endif; ?> rounded-lg shadow-md">
           <div class="p-4">
             <h2 class="text-xl font-semibold"><?= $job['title'] ?></h2>
             <p class="text-gray-700 text-lg mt-2"><?= $job['description'] ?></p>
@@ -74,10 +74,15 @@ $listings = [
               </li>
               <li class="mb-2">
                 <strong>Location:</strong> <?= $job['location'] ?>
+                <?php if ($job['location'] === 'New York') : ?>
+                  <span class="text-xs text-white bg-blue-500 rounded-full px-2 py-1 ml-2">Local</span>
+                <?php endif; ?> 
               </li>
-              <li class="mb-2">
-                <strong>Tags:</strong> <?= implode(', ', $job['tags']) ?>
-              </li>
+              <?php if (!empty($job['tags'])) : ?>
+                <li class="mb-2">
+                  <strong>Tags:</strong> <?= implode(', ', $job['tags']) ?>
+                </li>
+              <?php endif; ?>
             </ul>
           </div>
         </div>
