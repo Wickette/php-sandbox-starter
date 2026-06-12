@@ -10,3 +10,26 @@ Names Challenge:
 */
 
 $names = ['Alex', 'Beth', 'Caroline', 'Dave', 'Elanor', 'Anna', 'Freddie', 'Adam'];
+
+// 1. Take the array of names below and loop through them. The type of loop is up to you.
+// foreach($names as $name) {
+//     echo $name . "<br>";
+// }
+
+// 2. Within the loop, use a conditional statement to check if the first letter of the name is 'A'.
+// foreach($names as $name) {
+// if($name[0] != "A"){
+//     echo $name . "<br>";
+// continue;
+// }
+// }
+
+// 3. If the first letter is 'A', skip that name and continue to the next iteration.
+foreach($names as $name) {
+if($name[0] === "A") {
+continue;
+} else {
+    echo
+    strtolower(strrev($name)) . "<br>";
+}
+}
