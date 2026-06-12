@@ -26,6 +26,17 @@
 | >=       | Greater than or equal to |
 | >= tests if the left operand is greater than or equal to the right operand. So 10 >= 5 is true, and 10 >= 10 is also true, but 5 >= 10 is false.
 */
+$a = 10;
+$b = "20"; 
+var_dump($a == $b); // true
+var_dump($a === $b); // false   
+var_dump($a != $b); // false
+var_dump($a <> $b); // false
+var_dump($a !== $b); // true
+var_dump($a < $b); // true
+var_dump($a > $b); // false
+var_dump($a <= $b); // true
+var_dump($a >= $b); // false
 
 
 /*
@@ -41,10 +52,13 @@
 */
 
 $x = 10;
-$y = "10";
+$y = 20;    
 
 //die() is a function that terminates the script. It can be used to stop the execution of the script and output a message. In this case, we will use it to stop the script and output the results of our comparisons.
 
-var_dump($x == $y); // true
-var_dump($x === $y); // false    
-//testing git push
+var_dump($x and $y); // true    
+var_dump($x && $y); // true
+var_dump($x or $y); // true
+var_dump($x || $y); // true
+var_dump($x xor $y); // false
+var_dump(!$x); // false
