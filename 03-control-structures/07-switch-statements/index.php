@@ -14,10 +14,12 @@ switch (variable) {
         // code to execute if variable does not match any case
 }
 */ -->
+
+<!-- this switch statement determines the message and background color based on the current day of the week -->
 <?php $dayOfWeek = date('l'); // Get the current day of the week
 
 switch($dayOfWeek){
-case "Monday":
+case "Monday": // if the day of the week is Monday, set the message and color variables accordingly
   $message = "Monday blues!";
   $color = "blue";
   break;
