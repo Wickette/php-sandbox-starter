@@ -7,13 +7,12 @@ Fizzbuzz is a popular challenge for all types of programming languages. It is a 
 3. For the multiples of 5 print “Buzz”.
 4. For numbers which are multiples of both 3 and 5 print “FizzBuzz”.
 
-### Hints
+## Hints
 
 - You can use the modulus operator to check if a number is divisible by another number.
 - You can echo `<br>` tag to add a line break after each number.
 
-<details>
-  <summary>Click For Solution</summary>
+## Solution
 
 ```php
 for ($i = 1; $i <= 100; $i++) {
@@ -48,5 +47,3 @@ for ($i = 1; $i <= 100; $i++) {
     echo '<br>';
 }
 ```
-
-</details>
