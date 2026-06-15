@@ -7,3 +7,17 @@
 functionName(); //call the funtion to run 
 
 -->
+<?php   
+function sayHello() {
+    echo "Hello";
+}
+
+function sayGoodbye() {
+    return "Goodbye";
+}
+
+sayHello();
+sayGoodbye();
+
+
+?>
