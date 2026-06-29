@@ -14,7 +14,7 @@ $listings = [
     'description' => 'We are looking for a marketing specialist to develop and implement effective marketing strategies.',
     'salary' => 60000,
     'location' => 'New York',
-    'tags' => ['Digital Marketing', 'Social Media', 'SEO', 'Customer Service']
+    'tags' => ['Digital Marketing', 'Social Media', 'SEO']
   ],
   [
     'id' => 3,
@@ -22,7 +22,7 @@ $listings = [
     'description' => 'We are hiring an experienced accountant to handle financial transactions and ensure compliance.',
     'salary' => 55000,
     'location' => 'Chicago',
-    'tags' => ['Customer Service', "Math", "Excel"]
+    'tags' => []
   ],
   [
     'id' => 4,
@@ -41,15 +41,6 @@ $listings = [
     'tags' => []
   ],
 ];
-function formatSalary($salary){
-return "$" . number_format($salary);
-}
-
-function highlightTags($tags, $searchTerm){
-$tagStr = implode(", ",$tags);
-return str_replace($searchTerm, "<span class='bg-yellow-200 rounded'>{$searchTerm}</span>", $tagStr);
-}
-
 ?>
 
 
@@ -79,7 +70,7 @@ return str_replace($searchTerm, "<span class='bg-yellow-200 rounded'>{$searchTer
             <p class="text-gray-700 text-lg mt-2"><?= $job['description'] ?></p>
             <ul class="mt-4">
               <li class="mb-2">
-                <strong>Salary:</strong> <?= formatSalary($job['salary'])?>
+                <strong>Salary:</strong> <?= $job['salary'] ?>
               </li>
               <li class="mb-2">
                 <strong>Location:</strong> <?= $job['location'] ?>
@@ -89,7 +80,7 @@ return str_replace($searchTerm, "<span class='bg-yellow-200 rounded'>{$searchTer
               </li>
               <?php if (!empty($job['tags'])) : ?>
                 <li class="mb-2">
-                  <strong>Tags:</strong> <?= highlightTags($job['tags'], "Customer Service") ?>
+                  <strong>Tags:</strong> <?= implode(', ', $job['tags']) ?>
                 </li>
               <?php endif; ?>
             </ul>
