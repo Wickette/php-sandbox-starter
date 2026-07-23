@@ -1,7 +1,8 @@
 import { ItemView, Notice, WorkspaceLeaf } from "obsidian";
-import { Energy, TaskItem, ENERGY_LABEL, ENERGY_ORDER } from "./types";
+import { Energy, TaskItem, ENERGY_LABEL, ENERGY_ORDER, PRIORITY_LABEL } from "./types";
 import { scanVault, setDone, setSnooze } from "./taskParser";
 import { addDays, friendlyDate, todayISO, daysBetween } from "./dateUtils";
+import { EditTaskModal } from "./editTaskModal";
 import type AdhdTasksPlugin from "./main";
 
 export const VIEW_TYPE_TODAY = "adhd-today-view";
@@ -48,13 +49,17 @@ export class TodayView extends ItemView {
 	async refresh(): Promise<void> {
 		this.allTasks = await scanVault(this.app, this.plugin.settings);
 		if (this.focusTask) {
+			// Match by file + line rather than raw text: editing a task's
+			// metadata changes its raw line but it's still the same task.
 			const stillThere = this.allTasks.find(
 				(t) =>
 					t.file.path === this.focusTask?.file.path &&
-					t.raw === this.focusTask?.raw &&
+					t.line === this.focusTask?.line &&
 					!t.done
 			);
-			if (!stillThere) {
+			if (stillThere) {
+				this.focusTask = stillThere;
+			} else {
 				this.focusTask = null;
 				this.focusMode = false;
 			}
@@ -309,6 +314,12 @@ export class TodayView extends ItemView {
 		main.createSpan({ text: task.text || "(untitled task)", cls: "adhd-task-text" });
 
 		const badges = main.createDiv({ cls: "adhd-task-badges" });
+		if (task.priority) {
+			badges.createSpan({
+				text: PRIORITY_LABEL[task.priority],
+				cls: `adhd-badge adhd-badge-priority-${task.priority}`,
+			});
+		}
 		if (task.energy) {
 			badges.createSpan({
 				text: ENERGY_LABEL[task.energy],
@@ -326,6 +337,13 @@ export class TodayView extends ItemView {
 		});
 
 		const rowActions = row.createDiv({ cls: "adhd-task-row-actions" });
+		const editBtn = rowActions.createEl("button", { text: "✏️", cls: "adhd-icon-button" });
+		editBtn.setAttribute("aria-label", "Edit due date, priority, energy");
+		editBtn.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+			new EditTaskModal(this.app, this.plugin, task).open();
+		});
+
 		const focusBtn = rowActions.createEl("button", { text: "🎯", cls: "adhd-icon-button" });
 		focusBtn.setAttribute("aria-label", "Focus on this task");
 		focusBtn.addEventListener("click", (evt) => {
@@ -398,6 +416,12 @@ export class TodayView extends ItemView {
 		card.createEl("h1", { text: task.text || "(untitled task)" });
 
 		const badges = card.createDiv({ cls: "adhd-task-badges adhd-focus-badges" });
+		if (task.priority) {
+			badges.createSpan({
+				text: PRIORITY_LABEL[task.priority],
+				cls: `adhd-badge adhd-badge-priority-${task.priority}`,
+			});
+		}
 		if (task.energy) {
 			badges.createSpan({
 				text: ENERGY_LABEL[task.energy],
@@ -410,6 +434,9 @@ export class TodayView extends ItemView {
 				cls: `adhd-badge ${this.dueBadgeClass(task.due)}`,
 			});
 		}
+
+		const editBtn = card.createEl("button", { text: "✏️ Edit details", cls: "adhd-pill-button" });
+		editBtn.addEventListener("click", () => new EditTaskModal(this.app, this.plugin, task).open());
 
 		const timerWrap = card.createDiv({ cls: "adhd-timer" });
 		this.timerDisplayEl = timerWrap.createEl("div", { cls: "adhd-timer-display" });

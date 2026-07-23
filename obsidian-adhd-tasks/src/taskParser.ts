@@ -1,11 +1,12 @@
 import { App, TFile } from "obsidian";
-import { Energy, TaskItem } from "./types";
+import { Energy, Priority, TaskItem } from "./types";
 import { AdhdTasksSettings } from "./settings";
 
 const CHECKBOX_RE = /^(\s*)[-*] \[([ xX])\]\s?(.*)$/;
 const DUE_RE = /📅\s*(\d{4}-\d{2}-\d{2})/;
 const SNOOZE_RE = /💤\s*(\d{4}-\d{2}-\d{2})/;
 const ENERGY_RE = /🔋(low|med|high)/i;
+const PRIORITY_RE = /❗(low|med|high)/i;
 const EST_RE = /⏳\s*(\d+)/;
 const TAG_RE = /#([a-zA-Z0-9_/-]+)/g;
 
@@ -21,6 +22,7 @@ export function parseLine(
 	const due = DUE_RE.exec(rest)?.[1] ?? null;
 	const snoozedUntil = SNOOZE_RE.exec(rest)?.[1] ?? null;
 	const energy = (ENERGY_RE.exec(rest)?.[1]?.toLowerCase() as Energy) ?? null;
+	const priority = (PRIORITY_RE.exec(rest)?.[1]?.toLowerCase() as Priority) ?? null;
 	const estMatch = EST_RE.exec(rest);
 	const estMinutes = estMatch ? parseInt(estMatch[1], 10) : null;
 
@@ -35,6 +37,7 @@ export function parseLine(
 		.replace(DUE_RE, "")
 		.replace(SNOOZE_RE, "")
 		.replace(ENERGY_RE, "")
+		.replace(PRIORITY_RE, "")
 		.replace(EST_RE, "")
 		.replace(TAG_RE, "")
 		.trim()
@@ -50,6 +53,7 @@ export function parseLine(
 		due,
 		snoozedUntil,
 		energy: energy && ["low", "med", "high"].includes(energy) ? energy : null,
+		priority: priority && ["low", "med", "high"].includes(priority) ? priority : null,
 		estMinutes,
 		tags,
 	};
@@ -129,6 +133,61 @@ export async function setSnooze(
 		let next = raw.replace(SNOOZE_RE, "").replace(/\s{2,}/g, " ").trimEnd();
 		if (untilIso) {
 			next = `${next} 💤 ${untilIso}`;
+		}
+		return next;
+	});
+}
+
+function replaceOrRemoveToken(
+	line: string,
+	re: RegExp,
+	newToken: string | null
+): string {
+	if (re.test(line)) {
+		if (newToken === null) {
+			return line.replace(re, "").replace(/\s{2,}/g, " ").trimEnd();
+		}
+		return line.replace(re, newToken);
+	}
+	if (newToken !== null) {
+		return `${line.trimEnd()} ${newToken}`;
+	}
+	return line;
+}
+
+export interface TaskMetadataUpdate {
+	due?: string | null;
+	priority?: Priority | null;
+	energy?: Energy | null;
+}
+
+export async function setTaskMetadata(
+	app: App,
+	task: TaskItem,
+	updates: TaskMetadataUpdate
+): Promise<void> {
+	await rewriteLine(app, task, (raw) => {
+		let next = raw;
+		if ("due" in updates) {
+			next = replaceOrRemoveToken(
+				next,
+				DUE_RE,
+				updates.due ? `📅 ${updates.due}` : null
+			);
+		}
+		if ("priority" in updates) {
+			next = replaceOrRemoveToken(
+				next,
+				PRIORITY_RE,
+				updates.priority ? `❗${updates.priority}` : null
+			);
+		}
+		if ("energy" in updates) {
+			next = replaceOrRemoveToken(
+				next,
+				ENERGY_RE,
+				updates.energy ? `🔋${updates.energy}` : null
+			);
 		}
 		return next;
 	});

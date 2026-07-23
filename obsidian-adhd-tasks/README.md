@@ -13,6 +13,8 @@ Tasks are plain markdown checkboxes — no proprietary format, no database. This
 - **Gentle overdue badges** — overdue tasks get a soft, muted badge, never red/alarming text. Past a configurable grace period they just say "been waiting a while 💛" instead of counting shameful days.
 - **Pick for me** — decision paralysis relief. One click picks a random task from today's list (or the whenever bucket if today is empty) and drops you into Focus Mode.
 - **Focus Mode** — a single big card with one task, a focus timer (default 10 minutes, configurable), a Done button, and quick "not now" snooze options (tomorrow / in 3 days / next Monday) so postponing something doesn't feel like a failure.
+- **Click to jump to source** — clicking a task row (outside its checkbox/action buttons) opens the note and scrolls straight to that line.
+- **Inline editing** — the ✏️ button on a task row (or in Focus Mode) opens a small editor for due date, priority, and energy level without leaving the sidebar.
 - **Small celebrations** — completing a task from the Today view shows a random, genuinely encouraging message instead of nothing at all.
 
 ## Task metadata syntax
@@ -21,7 +23,7 @@ Tasks are ordinary checkboxes with optional inline tags, in any order:
 
 ```markdown
 - [ ] Call the dentist 📅 2026-07-14 🔋low #errand
-- [ ] Draft the proposal 🔋🔋🔋high ⏳45 #work
+- [ ] Draft the proposal 🔋🔋🔋high ❗high ⏳45 #work
 - [x] Already done, still shows if you enable it in settings
 ```
 
@@ -29,11 +31,12 @@ Tasks are ordinary checkboxes with optional inline tags, in any order:
 |---|---|
 | `📅 YYYY-MM-DD` | Due date |
 | `🔋low` / `🔋med` / `🔋high` | Energy level needed |
+| `❗low` / `❗med` / `❗high` | Priority |
 | `⏳<minutes>` | Rough time estimate |
 | `💤 YYYY-MM-DD` | Snoozed until this date (added automatically by the Snooze buttons) |
 | `#tag` | Any normal Obsidian tag |
 
-None of these are required — a bare `- [ ] Buy milk` works fine and shows up in the "Whenever" bucket until you give it a date.
+None of these are required — a bare `- [ ] Buy milk` works fine and shows up in the "Whenever" bucket until you give it a date. Due date, priority, and energy can all be set or changed from the Today view's ✏️ edit button instead of typing the tags by hand.
 
 ## Settings
 

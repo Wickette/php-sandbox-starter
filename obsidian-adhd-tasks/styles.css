@@ -173,6 +173,24 @@
 	color: var(--text-accent);
 }
 
+.adhd-badge-priority-low {
+	background: color-mix(in srgb, var(--text-muted) 14%, var(--background-primary));
+	color: var(--text-muted);
+	border-color: transparent;
+}
+
+.adhd-badge-priority-med {
+	background: color-mix(in srgb, var(--color-purple) 16%, var(--background-primary));
+	color: var(--color-purple);
+	border-color: transparent;
+}
+
+.adhd-badge-priority-high {
+	background: color-mix(in srgb, var(--color-red) 14%, var(--background-primary));
+	color: var(--color-red);
+	border-color: transparent;
+}
+
 /* Gentle, non-alarming overdue treatment. No harsh red. */
 .adhd-badge-due-soon {
 	background: color-mix(in srgb, var(--color-blue) 14%, var(--background-primary));
@@ -372,4 +390,41 @@
 .adhd-tasks-settings-textarea {
 	width: 100%;
 	font-family: var(--font-monospace);
+}
+
+/* Edit task modal */
+
+.adhd-edit-task-subtitle {
+	color: var(--text-muted);
+	margin-top: -6px;
+	margin-bottom: 18px;
+}
+
+.adhd-edit-field {
+	margin-bottom: 16px;
+}
+
+.adhd-edit-field label {
+	display: block;
+	font-size: 0.85em;
+	color: var(--text-muted);
+	margin-bottom: 6px;
+}
+
+.adhd-edit-due-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.adhd-edit-pill-row {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.adhd-edit-task-footer {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 6px;
 }

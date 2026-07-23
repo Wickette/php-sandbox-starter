@@ -1,6 +1,7 @@
 import { TFile } from "obsidian";
 
 export type Energy = "low" | "med" | "high";
+export type Priority = "low" | "med" | "high";
 
 export interface TaskItem {
 	file: TFile;
@@ -12,6 +13,7 @@ export interface TaskItem {
 	due: string | null; // YYYY-MM-DD
 	snoozedUntil: string | null; // YYYY-MM-DD
 	energy: Energy | null;
+	priority: Priority | null;
 	estMinutes: number | null;
 	tags: string[];
 }
@@ -29,3 +31,11 @@ export const ENERGY_LABEL: Record<Energy, string> = {
 };
 
 export const ENERGY_ORDER: Energy[] = ["low", "med", "high"];
+
+export const PRIORITY_LABEL: Record<Priority, string> = {
+	low: "Low priority",
+	med: "Medium priority",
+	high: "High priority",
+};
+
+export const PRIORITY_ORDER: Priority[] = ["low", "med", "high"];
