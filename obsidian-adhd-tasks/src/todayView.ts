@@ -295,6 +295,8 @@ export class TodayView extends ItemView {
 	private renderTaskRow(container: HTMLElement, task: TaskItem): void {
 		const row = container.createDiv({ cls: "adhd-task-row" });
 		if (task.done) row.addClass("is-done");
+		row.setAttribute("aria-label", "Open in note");
+		row.addEventListener("click", () => void this.openTaskInNote(task));
 
 		const checkbox = row.createEl("input", { type: "checkbox" });
 		checkbox.checked = task.done;
@@ -326,11 +328,22 @@ export class TodayView extends ItemView {
 		const rowActions = row.createDiv({ cls: "adhd-task-row-actions" });
 		const focusBtn = rowActions.createEl("button", { text: "🎯", cls: "adhd-icon-button" });
 		focusBtn.setAttribute("aria-label", "Focus on this task");
-		focusBtn.addEventListener("click", () => this.enterFocus(task));
+		focusBtn.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+			this.enterFocus(task);
+		});
 
 		const snoozeBtn = rowActions.createEl("button", { text: "💤", cls: "adhd-icon-button" });
 		snoozeBtn.setAttribute("aria-label", "Snooze");
-		snoozeBtn.addEventListener("click", () => this.showSnoozeMenu(snoozeBtn, task));
+		snoozeBtn.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+			this.showSnoozeMenu(snoozeBtn, task);
+		});
+	}
+
+	private async openTaskInNote(task: TaskItem): Promise<void> {
+		const leaf = this.app.workspace.getLeaf(false);
+		await leaf.openFile(task.file, { eState: { line: task.line } });
 	}
 
 	private dueBadgeText(due: string): string {
@@ -359,6 +372,7 @@ export class TodayView extends ItemView {
 			return;
 		}
 		const menu = anchor.parentElement!.createDiv({ cls: "adhd-snooze-menu" });
+		menu.addEventListener("click", (evt) => evt.stopPropagation());
 		const options: { label: string; iso: string }[] = [
 			{ label: "Tomorrow", iso: addDays(this.today, 1) },
 			{ label: "In 3 days", iso: addDays(this.today, 3) },

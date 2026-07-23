@@ -93,11 +93,18 @@
 	border-radius: 12px;
 	background: var(--background-secondary);
 	border: 1px solid transparent;
+	cursor: pointer;
 	transition: background-color 150ms ease, opacity 300ms ease;
 }
 
 .adhd-task-row:hover {
 	border-color: var(--background-modifier-border);
+	background: var(--background-modifier-hover);
+}
+
+.adhd-task-row input[type="checkbox"],
+.adhd-task-row-actions {
+	cursor: default;
 }
 
 .adhd-task-row input[type="checkbox"] {
